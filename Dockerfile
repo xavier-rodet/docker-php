@@ -10,6 +10,7 @@ RUN docker-php-ext-install pcntl
 RUN docker-php-ext-install posix
 
 # For PHPUnit (for testing protected,private, static or final methods)
+RUN apk install autoconf
 RUN pecl install uopz
 RUN docker-php-ext-enable uopz
 
