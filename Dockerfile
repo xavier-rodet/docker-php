@@ -9,17 +9,18 @@ RUN docker-php-ext-install pcntl
 # For snailweb/php-supervisor
 RUN docker-php-ext-install posix
 
-# For PHPUnit (for testing protected,private, static or final methods)
-RUN apk add --no-cache --update --virtual buildDeps $PHPIZE_DEPS \
- && pecl install uopz \
- && docker-php-ext-enable uopz \
- && apk del buildDeps
+# Create virtual package "PHPbuildDeps" to build PHP extensions
+RUN apk add --no-cache --update --virtual PHPbuildDeps $PHPIZE_DEPS
+
+# Install uopz (for PHPUnit testing protected, private, static or final methods)
+RUN pecl install uopz \
+ && docker-php-ext-enable uopz 
 
 # Install Xdebug
-RUN apk add --no-cache --update --virtual buildDeps $PHPIZE_DEPS \
-    && pecl install xdebug-beta \
-    && docker-php-ext-enable xdebug \
-    && apk del buildDeps
+RUN pecl install xdebug-beta \
+    && docker-php-ext-enable xdebug
 
+# Delete "PHPbuildDeps"
+RUN apk del PHPbuildDeps
 
 CMD ["/usr/local/bin/php"]
