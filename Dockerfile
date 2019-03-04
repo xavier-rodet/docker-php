@@ -10,7 +10,7 @@ RUN docker-php-ext-install pcntl
 RUN docker-php-ext-install posix
 
 # For PHPUnit (for testing protected,private, static or final methods)
-RUN apk add --no-cache --update --virtual buildDeps $PHPIZE_DEPS gcc \
+RUN apk add --no-cache --update --virtual buildDeps $PHPIZE_DEPS \
  && pecl install uopz \
  && docker-php-ext-enable uopz \
  && apk del buildDeps
