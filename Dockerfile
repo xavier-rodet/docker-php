@@ -10,14 +10,16 @@ RUN docker-php-ext-install pcntl
 RUN docker-php-ext-install posix
 
 # For PHPUnit (for testing protected,private, static or final methods)
-RUN apk install autoconf
-RUN pecl install uopz
-RUN docker-php-ext-enable uopz
+RUN apk add --no-cache --update --virtual buildDeps autoconf \
+ && pecl install uopz \
+ && docker-php-ext-enable uopz \
+ && apk del buildDeps
 
 # Install Xdebug
-RUN apk add --no-cache $PHPIZE_DEPS \
+RUN apk add --no-cache --update --virtual buildDeps $PHPIZE_DEPS \
     && pecl install xdebug-beta \
-    && docker-php-ext-enable xdebug
+    && docker-php-ext-enable xdebug \
+    && apk del buildDeps ${PHPIZE_DEPS}
 
 
 CMD ["/usr/local/bin/php"]
